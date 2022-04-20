@@ -31,14 +31,4 @@ public class FormProductDto {
     @NotNull(message = MessageValidation.MESSAGE_PRODUCT_CATEGORY)
     private Category category;
 
-    public Product transfer(){
-        Product product = new Product();
-        product.setName(this.name);
-        product.setPrice(this.price);
-        product.setImage(this.image);
-        product.setAvailable(Constant.ACTIVE);
-        product.setCategory(this.category);
-        product.setCreate(LocalDate.now());
-        return product;
-    }
 }

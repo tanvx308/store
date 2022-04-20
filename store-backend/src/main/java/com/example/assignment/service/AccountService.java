@@ -1,14 +1,25 @@
 package com.example.assignment.service;
 
 import com.example.assignment.entity.Account;
-import com.example.assignment.exception.NotExistException;
+import com.example.assignment.exception.AppException;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface AccountService {
-    Account save(Account account);
+import java.util.List;
 
-    Account update(Account account);
+public interface AccountService extends UserDetailsService {
+    List<Account> findAll(Pageable pageable);
 
-    Account findByUsername(String username) throws NotExistException;
+    Account createAccount(Account account);
 
-    void delete(Integer id);
+    Account updateAccount(Account account, Long id);
+
+    Account findByUsername(String username) throws AppException;
+
+    void delete(Long id);
+
+    UserDetails loadUserById(Long id);
+
+    Account findById(Long id);
 }

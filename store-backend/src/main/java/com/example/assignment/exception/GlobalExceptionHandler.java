@@ -18,13 +18,13 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @Slf4j
-public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     //handle for @valid
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
-        body.put("status", status.value());
+        body.put("Timestamp", new Date());
+        body.put("Status", status.value());
 
         //get all error
         List<String> errors = ex.getBindingResult()
@@ -32,16 +32,16 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 .stream()
                 .map(x -> x.getDefaultMessage())
                 .collect(Collectors.toList());
-        body.put("errors", errors);
+        body.put("Errors", errors);
         return new ResponseEntity<>(body, headers, status);
     }
 
-    @ExceptionHandler({NotExistException.class})
-    public ResponseEntity<Object> handleAppException(NotExistException ex){
+    @ExceptionHandler({AppException.class})
+    public ResponseEntity<Object> handleAppException(AppException ex){
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
-        body.put("status", ex.getCode());
-        body.put("errors", ex.getMessage());
-        return ResponseEntity.ok().body(body);
+        body.put("Timestamp", new Date());
+        body.put("Status", ex.getCode());
+        body.put("Errors", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 }

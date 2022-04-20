@@ -33,15 +33,4 @@ public class FormOrderDto {
     @NotNull(message = MessageValidation.MESSAGE_ORDER_AMOUNT)
     private Double amount;
 
-    public Order transfer(){
-        Order order = new Order();
-        order.setAddress(this.address);
-        order.setAccount(this.account);
-        order.setPhone(this.phone);
-        order.setCreate(LocalDate.now());
-        order.setStatus(Constant.STATUS_WAITING);
-        order.setAmount(this.amount);
-        order.setDetails(this.details);
-        return order;
-    }
 }

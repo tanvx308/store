@@ -2,55 +2,69 @@ package com.example.assignment.controller;
 
 import com.example.assignment.common.ContextURL;
 import com.example.assignment.dto.FormProductDto;
-import com.example.assignment.dto.ResponseDto;
 import com.example.assignment.entity.Product;
-import com.example.assignment.exception.NotExistException;
+import com.example.assignment.exception.AppException;
 import com.example.assignment.service.ProductService;
+import com.example.assignment.util.ConvertUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin(origins = "*")
 @RequestMapping(path = ContextURL.API_URL)
 public class ProductRestController {
+    Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     ProductService productService;
 
     @GetMapping(path = ContextURL.PRODUCT_FIND_ALL)
-    public ResponseEntity<?> findAll(@RequestParam("page")Optional<Integer> page){
-        Pageable pageable = PageRequest.of(page.orElse(1) - 1, 8);
-        return ResponseEntity.ok().body(productService.findAll(pageable));
+    public ResponseEntity<List<Product>> findAll(@RequestParam("page")Optional<Integer> page,
+                                                 @RequestParam("size") Optional<Integer> size){
+        Pageable pageable = PageRequest.of(page.orElse(1) - 1, size.orElse(8));
+        return new ResponseEntity<>(productService.findAll(pageable), HttpStatus.OK);
+    }
+
+    @GetMapping(path = ContextURL.PRODUCT_FIND_BY_CATEGORY)
+    public ResponseEntity<List<Product>> findByCategory(@RequestParam("page")Optional<Integer> page,
+                                                        @RequestParam("size") Optional<Integer> size,
+                                                        @PathVariable("id") Integer id){
+        Pageable pageable = PageRequest.of(page.orElse(1) - 1, size.orElse(8));
+        return new ResponseEntity<>(productService.findAllByCategory_Id(id, pageable), HttpStatus.OK);
     }
     
     @PostMapping(path = ContextURL.PRODUCT_SAVE)
-    public ResponseEntity<?> save(@Valid @RequestBody FormProductDto dto){
-        Product product = dto.transfer();
-        return ResponseEntity.ok(productService.save(product));
+    public ResponseEntity<Product> save(@Valid @RequestBody FormProductDto dto){
+        Product product = ConvertUtil.convertFromDtoToProduct(dto);
+        return new ResponseEntity<>(productService.save(product), HttpStatus.CREATED);
     }
 
     @PostMapping(path = ContextURL.PRODUCT_UPDATE)
-    public ResponseEntity<?> update(@Valid @RequestBody FormProductDto dto,
-                                    @PathVariable("id") Optional<Integer> id) throws NotExistException {
-        Product product = dto.transfer();
-        product.setId(id.orElse(null));
-        return ResponseEntity.ok().body(productService.update(product));
+    public ResponseEntity<Product> update(@Valid @RequestBody FormProductDto dto,
+                                    @PathVariable("id") Optional<Long> id) throws AppException {
+        Product product = ConvertUtil.convertFromDtoToProduct(dto);
+        return new ResponseEntity<>(productService.update(product, id.get()), HttpStatus.OK);
     }
 
     @GetMapping(path = ContextURL.PRODUCT_DELETE)
-    public ResponseEntity<?> delete(@PathVariable("id") Optional<Integer> id) throws NotExistException {
+    public ResponseEntity<String> delete(@PathVariable("id") Optional<Long> id) throws AppException {
         productService.delete(id.orElse(null));
-        return ResponseEntity.ok().body(new ResponseDto(400, String.format("Product with id %d is In_Active now", id.get())));
+        return new ResponseEntity<>("Succesfully!", HttpStatus.OK);
     }
 
     @GetMapping(path = ContextURL.PRODUCT_FIND_BY_ID)
-    public ResponseEntity<?> findById(@PathVariable("id") Optional<Integer> id) throws NotExistException {
+    public ResponseEntity<?> findById(@PathVariable("id") Optional<Long> id) throws AppException {
         return ResponseEntity.ok().body(productService.findById(id.orElse(null)));
     }
 

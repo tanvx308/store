@@ -1,7 +1,7 @@
 package com.example.assignment.service;
 
 import com.example.assignment.entity.Product;
-import com.example.assignment.exception.NotExistException;
+import com.example.assignment.exception.AppException;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -11,11 +11,13 @@ public interface ProductService {
 
     Product save(Product product);
 
-    Product update(Product product) throws NotExistException;
+    Product update(Product product, Long id);
 
-    void delete(Integer id) throws NotExistException;
+    void delete(Long id);
 
-    Product findById(Integer id) throws NotExistException;
+    Product findById(Long id);
 
     Integer countPage(Pageable pageable);
+
+    List<Product> findAllByCategory_Id(Integer id, Pageable pageable);
 }

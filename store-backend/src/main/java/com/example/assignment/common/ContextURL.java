@@ -6,6 +6,8 @@ public class ContextURL {
     //url product
     public static final String PRODUCT_FIND_ALL = "/products";
 
+    public static final String PRODUCT_FIND_BY_CATEGORY = "/product/category/{id}";
+
     public static final String PRODUCT_FIND_BY_ID = "/product/{id}";
 
     public static final String PRODUCT_SAVE = "/product/save";
@@ -16,6 +18,7 @@ public class ContextURL {
 
     public static final String PRODUCT_PAGE_COUNT = "/product/page-count";
 
+    public static final String PRODUCT_STATISTICAL = "/product/statistical";
 
     //url account
     public static final String ACCOUNT_FIND_BY_USERNAME = "/account/{username}";
@@ -26,7 +29,28 @@ public class ContextURL {
 
     public static final String ACCOUNT_DELETE = "/account/delete/{id}";
 
+    public static final String ACCOUNT_ROLE = "/role/{username}";
+
+    public static final String ACCOUNT_FIND_ALL = "/accounts";
+
+
 
     //url order
     public static final String ORDER_SAVE = "/order/save";
+
+    public static final String ORDER_FIND_BY_USERNAME = "/order/account/{username}";
+
+    public static final String ORDER_FIND_ALL = "/orders";
+
+    public static final String ORDER_UPDATE = "/order/update/{id}";
+
+    public static final String ORDER_STATISTICAL = "/statistical";
+
+    //url category
+    public static final String CATEGORY_FIND_ALL = "/categories";
+
+    //url Authority
+    public static final String AUTHORITY_APPOINT = "/authority/{accountId}/is-a/{roleId}";
+
+    public static final String AUTHORITY_RECALL = "/authority/{accountId}/not-a/{roleId}";
 }

@@ -1,18 +1,27 @@
 package com.example.assignment.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "accounts")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Account implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
-    @Column(name = "username", nullable = false, length = 45)
+    @Column(name = "username", nullable = false, length = 45, unique = true)
     private String username;
 
     @Column(name = "password", nullable = false)
@@ -21,63 +30,18 @@ public class Account implements Serializable {
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @Column(name = "email", nullable = false, length = 45)
+    @Column(name = "email", nullable = false, length = 45, unique = true)
     private String email;
 
     @Column(name = "available", nullable = false)
     private Boolean available = false;
 
-    @OneToMany(mappedBy = "account")
-    private Set<Order> orders;
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Order> orders;
 
-    @OneToMany(mappedBy = "account")
-    private Set<Authority> authorities;
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+//    @JsonIgnore
+    private List<Authority> authorities;
 
-    public Boolean getAvailable() {
-        return available;
-    }
-
-    public void setAvailable(Boolean available) {
-        this.available = available;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 }

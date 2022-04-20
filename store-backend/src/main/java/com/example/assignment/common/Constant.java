@@ -5,9 +5,9 @@ public class Constant {
 
     public static final Boolean IN_ACTIVE = false;
 
-    public static final String STATUS_WAITING = "Waiting";
+    public static final String STATUS_CHO_DUYET = "CHO DUYET";
 
-    public static final String STATUS_DONE = "Done";
+    public static final String STATUS_THANH_CONG = "THANH CONG";
 
-    public static final String STATUS_CANCEL = "Cancel";
+    public static final String STATUS_DA_HUY = "DA HUY";
 }
